@@ -21,6 +21,16 @@ class linear_reg:
         
         return res
 
+
+class logistic_reg:
+    def __init__(self, X, Y):
+        self.X = X
+        self.Y = Y
+        
+    def build(self):
+        
+        
+
         
 
 al = 3
