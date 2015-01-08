@@ -183,7 +183,29 @@ class rnd_line:
         if(p_num <= 0):
             raise ValueError('number of point > 0')
 
-    def build(self, rnd_range = 5):
+    def build(self, rnd_range = 2):
+
+        xx = []
+        yy = []
+        yrnd = []
+
+
+        for i in range(self.p_num):
+            xx.append(random.randint(self.l_bound, self.h_bound))
+
+        yy = [self.al*xp+self.bl for xp in xx]
+
+        #print xx
+        #print '\n'
+        #print yy
+
+        [yrnd.append(random.randint(yp-rnd_range, yp+rnd_range)) for yp in yy] 
+
+        
+        
+        return xx,yrnd
+
+    def build_qua(self, rnd_range = 20):
 
         xx = []
         yy = []
