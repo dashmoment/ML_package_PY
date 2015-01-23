@@ -185,7 +185,7 @@ class hardm_SVM:
 
             sol = solvers.qp(P, Q, G, H, A, B)
             returns = [x for x in sol]
-            print  sol['s'],sol['x']
+            print  sol['x']
 
 
             
@@ -292,7 +292,7 @@ class error_in:
 ##err = error_in(y_nd, ww_real,x_nd)
 ##err.build()
 
-dat = np.loadtxt('pla_data.csv',delimiter=',')
+dat = np.loadtxt('hsvm_data.csv',delimiter=',')
 x,y = np.array(dat[:,:2]),dat[:,2].astype(np.dtype('d'))
 x = np.transpose(x)
 
