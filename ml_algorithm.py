@@ -188,6 +188,21 @@ class hardm_SVM:
             print  sol['x']
 
 
+
+class decision_stump:
+    def __init__(self, data):
+        self.data = data
+    def build():
+        if len(self.data[0]) == 0:
+            raise ValueError('dimension of data should not be zero')
+        else:
+            dim = len(self.data[0])
+            d_num = len(self.data)
+            
+            for n in range(d_num):
+                
+
+
             
 class error_in:
     def __init__(self, y_real, wml, xin):
@@ -209,6 +224,9 @@ class error_in:
         err = sum(pow(aa-bb,2) for aa,bb in zip(yml,self.y_real))
         print 'E_in = ',err
         return yml
+
+
+    
         
 
 ##al = 3
