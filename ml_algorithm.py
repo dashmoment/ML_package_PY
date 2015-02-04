@@ -192,8 +192,6 @@ class hardm_SVM:
 
 class decision_stump:
    
-        
-
     def thresh(self,sort_dat,axis):
         thresh = []
         for i in range(len(sort_dat) - 1):
@@ -264,6 +262,9 @@ class decision_stump:
             ds_s = [+1 , -1]
             branch = num
             result = []
+            s = 0
+            axis = 0
+            thresh = 0
 
             #print len(tds_thresh),len(tds_thresh[0])
 
@@ -292,7 +293,7 @@ class decision_stump:
                             thresh = tds_thresh[d][k]
                             branch = gini
                             result = b_data
-            print result,s,axis,thresh
+            #print result,s,axis,thresh
             return result,s,axis,thresh #result[0] for left branch, and result[1] for right
                 
                 

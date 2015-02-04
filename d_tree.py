@@ -15,12 +15,14 @@ def tree(data):
 
     leaf = len(tree_g)
     
+       
     if leaf == 1:
-        n_node = len(data)
-        itr = len(data)
-        while n_node != 0:
-            itr += n_node/2
-            n_node = n_node/2
+        
+        n_node = len(data)      
+        pow_n = 0 
+        while n_node > pow(2,pow_n):
+            pow_n +=1         
+        itr = sum(pow(2,i) for i in range(pow_n+1))
 
             
     if leaf < itr + 1:
@@ -42,6 +44,7 @@ def tree(data):
                     tree_g[n][2] = leaf-1          
                     break
         tree(data)
+    
     return tree_g
      
 def tree_r(tree):
@@ -66,18 +69,41 @@ def tree_r(tree):
      
 
 def tree_ds(data):
-    num = len(data)
+    
+    tmp_dat = np.copy(data)
     fg_tree = tree(data)
     ds = mla.decision_stump()
-    result  = ds.tds_branch(data)
-    print result
-    return fg_tree
+
+    print len(fg_tree)
+
+    for n in range(len(fg_tree)):
+        if n != 0:
+            tmp_dat = fg_tree[n][1]
+            
+        if len(tmp_dat) > 1:
+            
+            d_res,s,axis,thresh  = ds.tds_branch(tmp_dat)
+            fg_tree[n][1] = [d_res,s,axis,thresh]
+
+            if fg_tree[n][0] != []:
+                fg_tree[fg_tree[n][0]][1] = d_res[0]
+            if fg_tree[n][2] != []:
+                fg_tree[fg_tree[n][2]][1] = d_res[1]
+                
+        elif len(tmp_dat) == 1:
+            fg_tree[n][1] = fg_tree[n][1][0][2]
+            fg_tree[n][0] = -1
+            fg_tree[n][2] = -1
+        
+    
+    for i in  range(len(fg_tree)):
+        print fg_tree[i],'\n'
     
    
 tree_g = [[]]
 traindat  = np.loadtxt('test.dat')
 tree_1 = tree_ds(traindat)
-print tree_1
+#print tree_1
 
 
 
