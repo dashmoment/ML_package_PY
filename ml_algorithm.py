@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import randomiser as rnd
 from scipy import misc as sc
 from cvxopt import matrix, solvers
+import sort
 
 class find_pla:
     def __init__(self, wt , x_pt , y_pt):
@@ -190,19 +191,112 @@ class hardm_SVM:
 
 
 class decision_stump:
-    def __init__(self, data):
-        self.data = data
-    def build():
-        if len(self.data[0]) == 0:
-            raise ValueError('dimension of data should not be zero')
-        else:
-            dim = len(self.data[0])
-            d_num = len(self.data)
+   
+        
+
+    def thresh(self,sort_dat,axis):
+        thresh = []
+        for i in range(len(sort_dat) - 1):
+            thresh.append((sort_dat[i+1][axis]+sort_dat[i][axis])/2)
+        return thresh
             
-            for n in range(d_num):
+
+    def b_thresh(self, b_data):
+        
+        dat = b_data
+        if len(dat[0]) == 0:
+            raise ValueError('dimension of data should not be zero')
+        
+        else:
+            dim = len(b_data[0])-1
+            d_num = len(dat)
+            sort_res = [[]]
+            sortmp = []
+            thresh_a = [[]]
+
+            
+            for d in range(dim): #sort each axis in data
+                res = sort.sort(dat)
+                sortmp = res.quicksort(0,d_num -1,d)
+                sort_res[len(sort_res) - 1] = sortmp
+                sort_res.append([])
+               
+            sort_res.pop()
+
+            for i in range(len(sort_res)): #derive thesh of all axis
+                thresh_a[len(thresh_a)-1] = self.thresh(sort_res[i], i)
+                thresh_a.append([])
+            thresh_a.pop()
+            
+            return thresh_a   #thesh_a[d][n] d: axis, n: number of threshold
+
+    def tree_gini(self, tdata, k): #B_tree branch rule by gini index
+        ncls = len(k)
+        num = [len(tdata[0]),len(tdata[1])]       
+        gini = [0,0]
+
+        
+        for j in range(len(gini)):
+            for n in range(ncls):
+                tmp = 0
+                for i in range(num[j]):
+                    if tdata[j][i]*k[n] > 0:
+                        tmp += 1
+                    else:
+                        tmp = tmp
+                gini[j] += pow(tmp,2)
                 
+                
+            gini[j] = 1. - (float(gini[j])/pow(num[j],2))
+            
+        branch = sum(num[m]*gini[m] for m in range(len(num)))
 
+        return branch
 
+    def tds_branch(self, td_data):
+        tds_thresh = self.b_thresh(td_data)
+
+        if len(td_data) == 0:
+            raise ValueError('data size should be larger than zero')
+        else:
+            num = len(td_data)
+            dim = len(td_data[0]) - 1
+            ds_s = [+1 , -1]
+            branch = num
+            result = []
+
+            #print len(tds_thresh),len(tds_thresh[0])
+
+            for i in range(len(ds_s)):
+                for d in range(dim):
+                    for k in range(len(tds_thresh[d])):
+                        b_data = [[],[]]
+                        b_label = [[],[]]
+                        for n in range(num):
+                            tmp = ds_s[i]*(td_data[n][d] - tds_thresh[d][k])
+
+                            if tmp > 0:
+                                b_data[0].append(td_data[n])                                            
+                                b_label[0].append(td_data[n][dim])
+                                
+                            if tmp <= 0:
+                                b_data[1].append(td_data[n])                                            
+                                b_label[1].append(td_data[n][dim])
+                        
+                        
+                        gini = self.tree_gini(b_label, ds_s)
+
+                        if gini < branch:
+                            s = ds_s[i]
+                            axis = d
+                            thresh = tds_thresh[d][k]
+                            branch = gini
+                            result = b_data
+            print result,s,axis,thresh
+            return result,s,axis,thresh #result[0] for left branch, and result[1] for right
+                
+                
+                
             
 class error_in:
     def __init__(self, y_real, wml, xin):
@@ -226,8 +320,13 @@ class error_in:
         return yml
 
 
-    
-        
+traindat  = np.loadtxt('test.dat')
+res = decision_stump()
+#res.b_thresh()
+
+res.tds_branch(traindat)
+
+
 
 ##al = 3
 ##bl = 100
@@ -309,13 +408,6 @@ class error_in:
 ##
 ##err = error_in(y_nd, ww_real,x_nd)
 ##err.build()
-
-dat = np.loadtxt('hsvm_data.csv',delimiter=',')
-x,y = np.array(dat[:,:2]),dat[:,2].astype(np.dtype('d'))
-x = np.transpose(x)
-
-h_svm = hardm_SVM(y,x)
-h_svm.build()
 
 
 

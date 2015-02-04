@@ -1,4 +1,5 @@
 import numpy as np
+import ml_algorithm as mla
 
 
 def node_c(c = 2):
@@ -26,7 +27,7 @@ def tree(data):
 
         if leaf == 1:
             tree_g[0] = node_c()
-            tree_g[0][1] = data
+            tree_g[0][1] = []
             tree_g.append(node_c())
         else:    
             for n in range(leaf):
@@ -62,60 +63,24 @@ def tree_r(tree):
     tree.pop()
         
 
-    
-    
      
 
-def tree2(data):
-    val_array = [[]]
-    num = 0
-    d_size = len(data)
-    itr_times = d_size
+def tree_ds(data):
+    num = len(data)
+    fg_tree = tree(data)
+    ds = mla.decision_stump()
+    result  = ds.tds_branch(data)
+    print result
+    return fg_tree
     
-
-    while (d_size/2) > 0:
-        itr_times += d_size/2
-        d_size = d_size/2
-
- 
-    if len(val_array) == 1:
-        num = 0
-        val_array[0] = node_c()
-        val_array[0][1] = data
-
-    for n in range(itr_times):
-
-        thresh = len(val_array[num][1])/2 
-
-        if thresh > 0:    
-            nodel = node_c()
-            noder = node_c()
-            for i in range(len(val_array[num][1])):
-                if i < thresh:
-                    nodel[1].append(val_array[num][1][i])
-                else:
-                    noder[1].append(val_array[num][1][i])
-               
-            val_array.append(nodel)
-            val_array.append(noder)     
-            val_array[num][0] = len(val_array) - 2   
-            val_array[num][2] = len(val_array) - 1
-
-        if  num < len(val_array) - 1:
-            num+=1
-        else:
-            break
-        
-        
-
-    print val_array,'\n'
-       
-raw = [1,2,3,4,5,6,7,8]
+   
 tree_g = [[]]
+traindat  = np.loadtxt('test.dat')
+tree_1 = tree_ds(traindat)
+print tree_1
 
-tree1 = tree(raw)
-tree_r(tree1)
-print tree1
+
+
 
 
 

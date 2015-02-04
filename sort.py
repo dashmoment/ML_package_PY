@@ -1,52 +1,51 @@
 import numpy as np
-traindat  = np.loadtxt('hw2_adaboost_train.dat')
-testdat = np.loadtxt('hw2_adaboost_test.dat')
+
+class sort:
+    def __init__(self, data):
+        self.data = data
+
+    def swap(self,i,j):
+
+        temp = np.copy(self.data[i])
+        self.data[i] = self.data[j]
+        self.data[j] = temp
 
 
-a = [7,8,11,6,17,2,3,18,3,10,16,1,8]
+    def quicksort(self, left, right,axis):
+        
+        pivot = self.data[left][axis]
+        i = left + 1
+        j = right
 
-def swap(i,j,a):
+        if left < right:
+            while i < j:              
+                while self.data[i][axis] < pivot and i+1 < len(self.data):
+                    i = i+1
+                while self.data[j][axis] > pivot and j-1 >=0:   
+                    j = j-1 
+                    
+                if i < j:
+                    self.swap(i,j)
+                    i = i+1
+                    j = j-1
 
-    temp = np.copy(a[i])
-    a[i] = a[j]
-    a[j] = temp
-
-
-def quicksort(a,left,right,axis):
-    pivot = a[left][axis]
-    i = left + 1
-    j = right
-
-    if left < right:
-        while i < j:
+            if(self.data[left][axis] > self.data[j][axis]):
+                self.swap(left,j)
             
-            while a[i][axis] < pivot and i+1 < len(a):
-                i = i+1
-            while a[j][axis] > pivot and j-1 >=0:   
-                j = j-1 
-                
-            if i < j:
-                swap(i,j,a)
-                i = i+1
-                j = j-1
-        if(a[left][axis] > a[j][axis]):
-            swap(left,j,a)
-        
-        quicksort(a,left,j-1,axis)
-        
-        if j+1 < len(a):
-            quicksort(a,j+1,right,axis)
-   
+            self.quicksort(left,j-1,axis)
+            
+            if j+1 < len(self.data):
+                self.quicksort(j+1,right,axis)
+       
 
-    return np.copy(a)
-    
+        return np.copy(self.data)
 
-quicksort(traindat,0,len(traindat)-1,0)
-train_axis0 = np.copy(traindat)
-quicksort(traindat,0,len(traindat)-1,1)
-train_axis1 = np.copy(traindat)
+##traindat  = np.loadtxt('hw2_adaboost_train.dat')
+##testdat = np.loadtxt('hw2_adaboost_test.dat')
+##sortdata = sort(traindat)
+##dat = sortdata.quicksort(0,len(traindat)-1,0)
+##
+##print dat
 
-print train_axis1,train_axis0
-np.savetxt('adB_train0.dat', train_axis0, delimiter=" ", fmt="%s")
-np.savetxt('adB_train1.dat', train_axis1, delimiter=" ", fmt="%s")
+
         
