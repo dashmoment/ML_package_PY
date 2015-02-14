@@ -18,7 +18,8 @@ class sort:
         j = right
 
         if left < right:
-            while i < j:              
+            while i < j:
+                #print self.data
                 while self.data[i][axis] < pivot and i+1 < len(self.data):
                     i = i+1
                 while self.data[j][axis] > pivot and j-1 >=0:   

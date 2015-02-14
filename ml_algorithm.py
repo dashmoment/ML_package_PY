@@ -243,11 +243,17 @@ class decision_stump:
                     else:
                         tmp = tmp
                 gini[j] += pow(tmp,2)
+
                 
                 
-            gini[j] = 1. - (float(gini[j])/pow(num[j],2))
+            if num[j] != 0:
+                gini[j] = 1. - (float(gini[j])/pow(num[j],2))
+            else:
+                gini[j] = 0
             
         branch = sum(num[m]*gini[m] for m in range(len(num)))
+
+       
 
         return branch
 
@@ -259,7 +265,7 @@ class decision_stump:
         else:
             num = len(td_data)
             dim = len(td_data[0]) - 1
-            ds_s = [+1 , -1]
+            ds_s = [+1. , -1.]
             branch = num
             result = []
             s = 0
@@ -293,8 +299,19 @@ class decision_stump:
                             thresh = tds_thresh[d][k]
                             branch = gini
                             result = b_data
+                            gidx = 0
+                            
+                        elif gini == 0:
+                            s = ds_s[i]
+                            axis = d
+                            thresh = tds_thresh[d][k]
+                            result = b_data
+                            gidx = -1
+                            break
+
+              
             #print result,s,axis,thresh
-            return result,s,axis,thresh #result[0] for left branch, and result[1] for right
+            return result,s,axis,thresh,gidx #result[0] for left branch, and result[1] for right
                 
                 
                 
@@ -321,11 +338,11 @@ class error_in:
         return yml
 
 
-traindat  = np.loadtxt('test.dat')
-res = decision_stump()
+##traindat  = np.loadtxt('test.dat')
+##res = decision_stump()
 #res.b_thresh()
 
-res.tds_branch(traindat)
+##res.tds_branch(traindat)
 
 
 
