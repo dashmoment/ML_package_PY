@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import randomiser as rnd
 from scipy import misc as sc
-from cvxopt import matrix, solvers
+#from cvxopt import matrix, solvers
 import sort
 
 class find_pla:
@@ -143,50 +143,50 @@ class qua_ndreg:
        
        
         
-class hardm_SVM:
-    def __init__(self, yin, xin, kernal = 2):
-        if len(yin) > 0 and len(yin) == len(xin[0]) :
-            self.y = yin
-            self.x = xin
-            self.kernal = 2
-        else:
-            raise ValueError('len(yin) = len(xin[0]) && len > 0')
-        
-    def build(self):
-        datasize = len(self.x[0])
-        dim = len(self.x)
-
-        q = np.zeros((datasize,datasize))
-
-        if self.kernal == 2:
-            for i in range(datasize):
-                for j in range(datasize):
-                    sum_k = sum((self.x[d][i]*self.x[d][j] for d in range(dim)))
-                    q[i][j] = self.y[i]*self.y[j]*(1+sum_k + pow(sum_k,2))
-
-                    
-            #k.shape = (datasize,datasize)
-
-            P = matrix(q)
-            #Q = matrix(-1,(datasize,1))
-            q = np.ones((datasize,1))
-            Q = matrix(q)
-            #a = np.transpose(self.y)
-            A = matrix(self.y)
-            A = A.trans()
-            #B = matrix(0,(datasize,1),'d')
-            B = matrix(0.)
-            G = matrix(0.0, (datasize,datasize))
-            G[::datasize+1] = -1.0
-            #G = matrix(1,(1,datasize))
-            h = np.zeros((datasize,1))
-            H = matrix(h)
-            #H = matrix(0,(datasize,1))
-            #print B 
-
-            sol = solvers.qp(P, Q, G, H, A, B)
-            returns = [x for x in sol]
-            print  sol['x']
+##class hardm_SVM:
+##    def __init__(self, yin, xin, kernal = 2):
+##        if len(yin) > 0 and len(yin) == len(xin[0]) :
+##            self.y = yin
+##            self.x = xin
+##            self.kernal = 2
+##        else:
+##            raise ValueError('len(yin) = len(xin[0]) && len > 0')
+##        
+##    def build(self):
+##        datasize = len(self.x[0])
+##        dim = len(self.x)
+##
+##        q = np.zeros((datasize,datasize))
+##
+##        if self.kernal == 2:
+##            for i in range(datasize):
+##                for j in range(datasize):
+##                    sum_k = sum((self.x[d][i]*self.x[d][j] for d in range(dim)))
+##                    q[i][j] = self.y[i]*self.y[j]*(1+sum_k + pow(sum_k,2))
+##
+##                    
+##            #k.shape = (datasize,datasize)
+##
+##            P = matrix(q)
+##            #Q = matrix(-1,(datasize,1))
+##            q = np.ones((datasize,1))
+##            Q = matrix(q)
+##            #a = np.transpose(self.y)
+##            A = matrix(self.y)
+##            A = A.trans()
+##            #B = matrix(0,(datasize,1),'d')
+##            B = matrix(0.)
+##            G = matrix(0.0, (datasize,datasize))
+##            G[::datasize+1] = -1.0
+##            #G = matrix(1,(1,datasize))
+##            h = np.zeros((datasize,1))
+##            H = matrix(h)
+##            #H = matrix(0,(datasize,1))
+##            #print B 
+##
+##            sol = solvers.qp(P, Q, G, H, A, B)
+##            returns = [x for x in sol]
+##            print  sol['x']
 
 
 

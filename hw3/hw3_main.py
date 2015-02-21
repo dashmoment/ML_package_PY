@@ -21,37 +21,37 @@ err,sgn = tree.d_valid(tree_1,testdat)
 ##
 ##    tree.rndforest(testdat,bstree)
 
-##err_total = 0
-##
-##for time in range(100):
-##    bs = []
-##    bstree = []
-##    bs = tree.bootstrap(traindat,300)
-##   
-##    for t in range(len(bs)):
-##        tdata = []
-##        tdata = np.copy(bs[t])
-##        bstree.append(tree.pruned(tdata))
-##
-##    ds_err = 0
-##    dat = np.copy(traindat)
-##
-##    for n in range(len(dat)):
-##        sgn = 0
-##        for i in range(len(bstree)):
-##            tmp = bstree[i][0][1][1]*(dat[n][bstree[i][0][1][2]] - bstree[i][0][1][3])
-##            if tmp > 0:
-##                sgn += bstree[i][1][1]
-##            if  tmp <= 0:
-##                sgn += bstree[i][2][1]
-##        sgn = sgn*dat[n][2]
-##
-##        if sgn < 0:
-##            ds_err += 1
-##    print float(ds_err)/100
-##    err_total += float(ds_err)/100
-##        
-##print  float(err_total)/100   
+err_total = 0
+
+for time in range(100):
+    bs = []
+    bstree = []
+    bs = tree.bootstrap(traindat,300)
+   
+    for t in range(len(bs)):
+        tdata = []
+        tdata = np.copy(bs[t])
+        bstree.append(tree.pruned(tdata))
+
+    ds_err = 0
+    dat = np.copy(traindat)
+
+    for n in range(len(dat)):
+        sgn = 0
+        for i in range(len(bstree)):
+            tmp = bstree[i][0][1][1]*(dat[n][bstree[i][0][1][2]] - bstree[i][0][1][3])
+            if tmp > 0:
+                sgn += bstree[i][1][1]
+            if  tmp <= 0:
+                sgn += bstree[i][2][1]
+        sgn = sgn*dat[n][2]
+
+        if sgn < 0:
+            ds_err += 1
+    print float(ds_err)/100
+    err_total += float(ds_err)/100
+        
+print  float(err_total)/100   
 
 
 ##n_rule = 0
